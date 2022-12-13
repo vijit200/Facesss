@@ -25,7 +25,7 @@ class TrainDataCollector:
 
         #self.logger.info('{} IMAGE CAPTURE STARTED {}'.format('*'*20,'*'*20))
         
-        cap = cv2.VideoCapture(1)
+        cap = cv2.VideoCapture(0)
         faces = 0
         frames = 0
         max_faces = int(self.args["faces"])

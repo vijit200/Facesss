@@ -8,7 +8,7 @@ import tkinter.font as font
 
 from src.face_detect.get_faces import TrainDataCollector
 from src.face_embedding.face_embedder import GeneratingFaceEmbedding
-
+from src.training.training import TrainingFaceRecogModel
 class RegistrationModule:
 
     def __init__(self):
@@ -78,6 +78,11 @@ class RegistrationModule:
                             activebackground="#118ce1", font=('times', 15, ' bold '))
         takeImg.place(x=80, y=350)
 
+        trainImg = tk.Button(self.window, text="Train Images", command=self.trainModel, fg="white", bg="#363e75", width=15,
+                             height=2,
+                             activebackground="#118ce1", font=('times', 15, ' bold '))
+        trainImg.place(x=350, y=350)
+
         self.window.mainloop()
 
     def collectUserImageForRegistration(self):
@@ -118,5 +123,24 @@ class RegistrationModule:
 
         genFaceEmbdng = GeneratingFaceEmbedding(args)
         genFaceEmbdng.genFaceEmbedding()
+
+    def trainModel(self):
+        # ============================================= Training Params ====================================================== #
+
+        ap = argparse.ArgumentParser()
+
+        # ap = argparse.ArgumentParser()
+        ap.add_argument("--embeddings", default="faceEmbeddingModels/embeddings.pickle",
+                        help="path to serialized db of facial embeddings")
+        ap.add_argument("--model", default="faceEmbeddingModels/my_model.h5",
+                        help="path to output trained model")
+        ap.add_argument("--le", default="faceEmbeddingModels/le.pickle",
+                        help="path to output label encoder")
+
+        args = vars(ap.parse_args())
+
+        self.getFaceEmbedding()
+        faceRecogModel = TrainingFaceRecogModel(args)
+        faceRecogModel.trainingKerasModelForFaceRecogination()
 
 RegistrationModule()
