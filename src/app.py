@@ -9,6 +9,7 @@ import tkinter.font as font
 from src.face_detect.get_faces import TrainDataCollector
 from src.face_embedding.face_embedder import GeneratingFaceEmbedding
 from src.training.training import TrainingFaceRecogModel
+from src.prediction.prediction import FacePredictor
 class RegistrationModule:
 
     def __init__(self):
@@ -83,6 +84,16 @@ class RegistrationModule:
                              activebackground="#118ce1", font=('times', 15, ' bold '))
         trainImg.place(x=350, y=350)
 
+        predictImg = tk.Button(self.window, text="Predict", command=self.makePrediction, fg="white", bg="#363e75",
+                             width=15,
+                             height=2,
+                             activebackground="#118ce1", font=('times', 15, ' bold '))
+        predictImg.place(x=600, y=350)
+
+        quitWindow = tk.Button(self.window, text="Quit", command=self.close_window, fg="white", bg="#363e75", width=10, height=2,
+                               activebackground="#118ce1", font=('times', 15, 'bold'))
+        quitWindow.place(x=650, y=510)
+
         self.window.mainloop()
 
     def collectUserImageForRegistration(self):
@@ -142,5 +153,12 @@ class RegistrationModule:
         self.getFaceEmbedding()
         faceRecogModel = TrainingFaceRecogModel(args)
         faceRecogModel.trainingKerasModelForFaceRecogination()
+
+    def makePrediction(self):
+        faceDetector = FacePredictor()
+        faceDetector.detectFace()
+
+    def close_window(self):
+        self.window.destroy()
 
 RegistrationModule()
